@@ -34,8 +34,8 @@ fds = vstack(run_datasets, a=0)
 
 print fds.summary()
 
-# Basic preprocessing
-# Detrending
+# ----------------------------- Basic preprocessing -------------------------------
+# ------------------------------Detrending
 
 
 detrender = PolyDetrendMapper(polyord=1, chunks_attr='chunks')
@@ -43,7 +43,7 @@ detrender = PolyDetrendMapper(polyord=1, chunks_attr='chunks')
 detrended_fds = fds.get_mapped(detrender)
 print detrended_fds.a.mapper
 
-# Normalization
+# ------------------------------ Normalization
 
 zscore(detrended_fds, param_est=('targets', ['rest']))
 fds = detrended_fds
@@ -53,7 +53,7 @@ fds = fds[fds.sa.targets != 'rest']
 print fds.shape
 
 
-# Computing Patterns Of Activation
+# ----------------------------- Computing Patterns Of Activation
 
 rnames = {0: 'even', 1: 'odd'}
 fds.sa['runtype'] = [rnames[c % 2] for c in fds.sa.chunks]
