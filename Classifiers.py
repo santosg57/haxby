@@ -1,3 +1,5 @@
+#!/bin/python
+
 from mvpa2.tutorial_suite import *
 
 pati = '/home/inb/santosg/TUTO/tutorial_data/data/haxby2001'
