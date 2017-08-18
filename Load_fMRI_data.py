@@ -1,5 +1,7 @@
 # Load fMRI data
 
+from mvpa2.tutorial_suite import *
+
 bold_fname = os.path.join(tutorial_data_path, 'haxby2001', 'sub001',
                               'BOLD', 'task001_run001', 'bold.nii.gz')
 ds = fmri_dataset(bold_fname)
