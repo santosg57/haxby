@@ -2,6 +2,8 @@
 
 # directory that contains the data files
 
+from mvpa2.tutorial_suite import *
+
 tutorial_data_path = '/home/inb/santosg/TUTO/tutorial_data/data/'
 
 data_path = os.path.join(tutorial_data_path, 'haxby2001')
