@@ -24,7 +24,7 @@ print ds.a.voxel_eldim
 print ds.a.voxel_dim
 print 'imghdr' in ds.a
 
-print print ds.a.mapper
+print ds.a.mapper
 
 stripped = ds.copy(deep=False, sa=['time_coords'], fa=[], a=[])
 print stripped
