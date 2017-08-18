@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # Dataset basics and concepts
 
 from mvpa2.tutorial_suite import *
