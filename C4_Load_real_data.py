@@ -1,6 +1,9 @@
 # Load real data
 
 # directory that contains the data files
+
+tutorial_data_path = '/home/inb/santosg/TUTO/tutorial_data/data/'
+
 data_path = os.path.join(tutorial_data_path, 'haxby2001')
 attr_fname = os.path.join(data_path, 'sub001',
                            'BOLD', 'task001_run001', 'attributes.txt')
