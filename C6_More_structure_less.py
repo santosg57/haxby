@@ -1,5 +1,8 @@
 # More structure, less duplication of work
 
+from mvpa2.tutorial_suite import *
+data_path = '/home/inb/santosg/TUTO/tutorial_data/data/haxby2001/'
+
 dhandle = OpenFMRIDataset(data_path)
 print dhandle.get_subj_ids()
 
