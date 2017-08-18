@@ -34,7 +34,7 @@ detrended_fds = fds.get_mapped(detrender)
 print detrended_fds.a.mapper
 
 
-# Normalization¶
+# Normalization
 
 zscorer = ZScoreMapper(param_est=('targets', ['rest']))
 
