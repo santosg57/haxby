@@ -1,7 +1,7 @@
 from mvpa2.tutorial_suite import *
 from mvpa2.misc.plot import plot_err_line, plot_bars
 
-data_path = '/home/inb/jhevia/pymvpa2/data2/Azalea2017/'
+data_path = '/home/inb/jhevia/pymvpa2/data3/Azalea2017/'
 #data_path = '/home/inb/santosg/Azalea2017/Azalea2017/'
 
 mask_fname = os.path.join(data_path, 'sub001', 'masks', 'orig', 'PH101Cor1TPJright.nii.gz')
@@ -33,20 +33,20 @@ for run_id in dhandle.get_task_bold_run_ids(task)[subj]:
 # this is PyMVPA's vstack() for merging samples from multiple datasets
 # a=0 indicates that the dataset attributes of the first run should be used
 # for the merged dataset
-fds = vstack(run_datasets, a=0)
+ds = vstack(run_datasets, a=0)
 
 
-print '\n SHAPE: ', fds.shape
+print '\n SHAPE: ', ds.shape
 
 print '\n----------------------Event-related Pre-processing Is Not Event-related -------------------'
 
-poly_detrend(fds, polyord=1, chunks_attr='chunks')
+poly_detrend(ds, polyord=1, chunks_attr='chunks')
 
-orig_ds = fds.copy()
+orig_ds = ds.copy()
 
 print '\n--------------------- Design Specification ----------------------'
 
-events = find_events(targets=fds.sa.targets, chunks=fds.sa.chunks)
+events = find_events(targets=ds.sa.targets, chunks=ds.sa.chunks)
 
 print '\n numero de eventos: ', len(events)
 print '\n ------ eventos --------'
@@ -57,43 +57,40 @@ for e in events[:4]:
 events = [ev for ev in events if ev['targets'] in ['POSITIVO', 'NEGATIVO']]
 print '\n numero de eventos: ',  len(events)
 print '\n --------- eventos ----------'
-for e in events[:4]:
+
+for e in events:
    print e
 
 print '\n -------------------Response Modeling--------------------'
 
-# temporal distance between samples/volume is the volume repetition time
-TR = np.median(np.diff(fds.sa.time_coords))
-
-print '\n TR: ', TR
-
-# convert onsets and durations into timestamps
 for ev in events:
-   ev['onset'] = (ev['onset'] * TR)
-   ev['duration'] = ev['duration'] * TR
+   if (ev['duration'] == 1):
+      ev['onset'] -= 2
+      ev['duration'] = 4
+   else:
+      ev['onset'] -= 2
+      ev['duration'] = 5
+   print 'ev -----------------------', ev
 
-print '\n --------- termino timestamps'
+print len(events)
 
-evds = fit_event_hrf_model(fds,
-   events,
-   time_attr='time_coords',
-   condition_attr=('targets', 'chunks'))
+evds = eventrelated_dataset(ds, events=events)
 
-print '\n -------------- termino el fit'
+print '-------------- Entra a crossvalidation -----------------------'
 
-print '\n -------------- LONGITUD DE evds: ', len(evds)
+cvte = CrossValidation(GNB(), NFoldPartitioner(),
+                        postproc=mean_sample())
+sl = Searchlight(cvte,
+                  IndexQueryEngine(voxel_indices=Sphere(1),
+                                   event_offsetidx=Sphere(2)),
+                  postproc=mean_sample())
+res = sl(evds)
 
-zscore(evds, chunks_attr=None)
-print '\n --------------  termino zscore'
+#-------------------------------------------------------------------------------
 
-clf = kNN(k=1, dfx=one_minus_correlation, voting='majority')
-cv = CrossValidation(clf, NFoldPartitioner(attr='chunks'))
-cv_glm = cv(evds)
-print '\n %.2f' % np.mean(cv_glm)
+ts = res.a.mapper.reverse1(1 - res.samples[0])
+# need to put the time axis last for export to NIfTI
+ts = np.rollaxis(ts, 0, 4)
+ni = nb.Nifti1Image(ts, ds.a.imgaffine).to_filename('ersl_aza.nii')
 
-zscore(fds, param_est=('targets', ['REST']))
-avgds = fds.get_mapped(mean_group_sample(['targets', 'chunks']))
-avgds = avgds[np.array([t in ['POSITIVO','NEGATIVO'] for t in avgds.sa.targets])]
 
-cv_avg = cv(avgds)
-print '\n %.2f' % np.mean(cv_avg)

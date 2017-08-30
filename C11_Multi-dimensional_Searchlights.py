@@ -12,8 +12,10 @@ events = find_events(targets=ds.sa.targets, chunks=ds.sa.chunks)
 events = [ev for ev in events if ev['targets'] in ['house', 'face']]
 event_duration = 13
 for ev in events:
+     print 'ev --------------', ev
      ev['onset'] -= 2
      ev['duration'] = event_duration
+     print 'ev ================-', ev
 evds = eventrelated_dataset(ds, events=events)
 
 #-------------------------------------------------------------------------------
