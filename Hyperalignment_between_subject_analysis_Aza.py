@@ -3,9 +3,55 @@ from mvpa2.suite import *
 verbose.level = 2
 
 verbose(1, "Loading data...")
-filepath = os.path.join('/home/inb/santosg/TUTO/tutorial_data/data/haxby2001/',
-                        'hyperalignment_tutorial_data.hdf5.gz')
-ds_all = h5load(filepath)
+
+def Lee_Sujeto(sujeto):
+    data_path = '/home/inb/jhevia/pymvpa2/data'+str(sujeto)+'/Azalea2017/'
+
+    mask_fname = os.path.join(data_path, 'sub001', 'masks', 'orig', 'GFII.nii.gz')
+
+    print '\n', data_path, '\n'
+
+    dhandle = OpenFMRIDataset(data_path)
+
+    task = 1   # object viewing task
+    model = 1  # image stimulus category model
+    subj = 1
+    run_datasets = []
+
+    for run_id in dhandle.get_task_bold_run_ids(task)[subj]:
+        #  print '\n run_id: ', run_id
+        # load design info for this run
+        run_events = dhandle.get_bold_run_model(model, subj, run_id)
+        # load BOLD data for this run (with masking); add 0-based chunk ID
+        run_ds = dhandle.get_bold_run_dataset(subj, task, run_id,
+                                              chunks=run_id -1)
+#                                              mask=mask_fname)
+        # convert event info into a sample attribute and assign as 'targets'
+        run_ds.sa['targets'] = events2sample_attr(
+                    run_events, run_ds.sa.time_coords, noinfolabel='REST')
+        # additional time series preprocessing can go here
+        run_datasets.append(run_ds)
+#        print run_ds.sa.targets
+#        print '------------------------------------------------'
+# this is PyMVPA's vstack() for merging samples from multiple datasets
+# a=0 indicates that the dataset attributes of the first run should be used
+# for the merged dataset
+    ww = vstack(run_datasets, a=0)
+    print ' shape ww'
+    print ww.shape
+    return ww
+
+ds_all = [0, 0, 0, 0]
+for suj in range(4):
+   print suj
+   xx = Lee_Sujeto(suj+1)
+   ds_all[suj] = xx
+   print xx.summary()
+   print '=============================================================================='
+
+#filepath = os.path.join('/home/inb/santosg/TUTO/tutorial_data/data/haxby2001/',
+#                        'hyperalignment_tutorial_data.hdf5.gz')
+#ds_all = h5load(filepath)
 
 print 'type: \n'
 print(type(ds_all))
@@ -61,7 +107,7 @@ sbfs = SensitivityBasedFeatureSelection(OneWayAnova(), fselector,
 # create classifier with automatic feature selection
 fsclf = FeatureSelectionClassifier(clf, sbfs)
 
-print '-------------------------- Within-subject classification ------------------'
+print '\n -------------------------- Within-subject classification ------------------\n'
 
 verbose(1, "Performing classification analyses...")
 verbose(2, "within-subject...", cr=False, lf=False)
@@ -75,7 +121,7 @@ wsc_results = vstack(wsc_results)
 verbose(2, " done in %.1f seconds" % (time.time() - wsc_start_time,))
 
 
-print '---------------------------- Between-subject classification using anatomically aligned data ------------'
+print '\n ---------------------------- Between-subject classification using anatomically aligned data ------------\n'
 
 verbose(2, "between-subject (anatomically aligned)...", cr=False, lf=False)
 ds_mni = vstack(ds_all)
@@ -86,7 +132,7 @@ cv = CrossValidation(fsclf,
 bsc_mni_results = cv(ds_mni)
 verbose(2, "done in %.1f seconds" % (time.time() - mni_start_time,))
 
-print '---------------------------- Between-subject classification with Hyperalignment(TM) ------------------'
+print '\n ---------------------------- Between-subject classification with Hyperalignment(TM) ------------------\n'
 
 verbose(2, "between-subject (hyperaligned)...", cr=False, lf=False)
 hyper_start_time = time.time()
@@ -142,7 +188,7 @@ for test_run in range(nruns):
 bsc_hyper_results = hstack(bsc_hyper_results)
 verbose(2, "done in %.1f seconds" % (time.time() - hyper_start_time,))
 
-print '-------------------------------- Comparing the results ---------------------------'
+print '\n -------------------------------- Comparing the results ---------------------------\n '
 
 verbose(1, "Average classification accuracies:")
 verbose(2, "within-subject: %.2f +/-%.3f"
