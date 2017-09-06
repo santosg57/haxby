@@ -51,7 +51,7 @@ for suj in range(4):
 
 
 #filepath = os.path.join('/home/inb/santosg/TUTO/tutorial_data/data/haxby2001/',
-                        'hyperalignment_tutorial_data.hdf5.gz')
+#                        'hyperalignment_tutorial_data.hdf5.gz')
 #ds_all = h5load(filepath)
 
 ncats = len(ds_all[0].UT)

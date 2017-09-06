@@ -37,6 +37,7 @@ print(summary(xx))
 _ = [zscore(ds) for ds in ds_all]
 # inject the subject ID into all datasets
 for i, sd in enumerate(ds_all):
+    print i, len(sd)
     sd.sa['subject'] = np.repeat(i, len(sd))
 # number of subjects
 nsubjs = len(ds_all)

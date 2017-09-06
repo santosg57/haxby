@@ -13,12 +13,16 @@ print ds.nfeatures
 
 print ds.shape
 
+print '-------------------------- mascara ---------------------------\n'
+
 mask_fname = os.path.join(tutorial_data_path, 'haxby2001', 'sub001',
                            'masks', 'orig', 'vt.nii.gz')
 
 ds = fmri_dataset(bold_fname, mask=mask_fname)
 print len(ds)
 print ds.nfeatures
+
+print '\n ------------------- indices en tiempo ---------------------\n'
 
 print ds.sa.time_indices[:5]
 print ds.sa.time_coords[:5]
@@ -32,6 +36,8 @@ print ds.a.mapper
 
 stripped = ds.copy(deep=False, sa=['time_coords'], fa=[], a=[])
 print stripped
+
+print '\n ------------------------- Intermediate storage -------------------- \n'
 
 import tempfile, shutil
 # create a temporary directory

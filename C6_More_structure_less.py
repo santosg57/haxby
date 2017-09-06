@@ -25,6 +25,6 @@ print len(fds), len(targets)
 
 task = 1
 fds = dhandle.get_bold_run_dataset(subj, task, run, mask=mask_fname)
-print fds
+print dir(fds)
 
 
