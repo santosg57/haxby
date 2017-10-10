@@ -1,0 +1,74 @@
+Searchlight on fMRI data
+
+#!/usr/bin/env python
+
+
+from mvpa2.suite import *
+
+if __debug__:
+    debug.active += ["SLC"]
+
+datapath = os.path.join('/home/inb/santosg/TUTO/tutorial_data/data')
+
+dataset = load_tutorial_data(
+        path=datapath,
+        roi='brain',
+        add_fa={'vt_thr_glm': os.path.join(datapath,'haxby2001', 'sub001', 'masks',
+                                                     'orig', 'vt.nii.gz')})
+
+print 'C: ', dataset.C
+#print 'O: ', dataset.O
+#print 'S: ', dataset.S
+print 'T: ', dataset.T
+print 'UC: ', dataset.UC
+print 'UT: ', dataset.UT
+print 'a: ', dataset.a
+print 'chunks: ', dataset.chunks
+print 'fa: ', dataset.fa
+#print 'item: ', dataset.item
+print 'mapper: ', dataset.mapper
+print 'nfeatures: ', dataset.nfeatures
+#print 'nsamples: ', dataset.nsamples
+print 'sa: ', dataset.sa
+#print 'samples: ', dataset.samples
+print 'shape: ', dataset.shape
+print 'targets: ', dataset.targets
+.=============================================
+
+
+WARNING: Detected incorrect (nan) scl_ fields. Resetting to scl_slope=1.0 and scl_inter=0.0
+ * Please note: warnings are printed only once, but underlying problem might occur many times *
+['C', 'O', 'S', 'T', 'UC', 'UT', '__array__', '__class__', '__copy__', '__deepcopy__', '__delattr__', 
+'__dict__', '__doc__', '__format__', '__getattribute__', '__getitem__', '__hash__', '__init__',
+ '__len__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__repr_full__',
+ '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
+ '_append_mapper', '_collection_id2obj', 'a', 'aggregate_features', 'append',
+ 'chunks', 'coarsen_chunks', 'copy', 'fa', 'find_collection', 'from_channeltimeseries',
+ 'from_hdf5', 'from_npz', 'from_wizard', 'get_attr', 'get_mapped', 'get_nsamples_per_attr',
+ 'get_samples_by_attr', 'get_samples_per_chunk_target', 'idhash', 'init_origids', 'item', 
+'mapper', 'nfeatures', 'nsamples', 'random_samples', 'remove_invariant_features',
+ 'remove_nonfinite_features', 'sa', 'samples', 'save', 'select', 'set_attr',
+ 'shape', 'summary', 'summary_targets', 'targets', 'to_npz', 'uniquechunks', 'uniquetargets']
+
+
+.==========================================
+
+santosg@charcot:~/TUTO/tutorial_data/data/haxby$ ./temp.py 
+WARNING: Detected incorrect (nan) scl_ fields. Resetting to scl_slope=1.0 and scl_inter=0.0
+ * Please note: warnings are printed only once, but underlying problem might occur many times *
+C:  [ 0  0  0 ..., 11 11 11]
+T:  ['rest' 'rest' 'rest' ..., 'rest' 'rest' 'rest']
+UC:  [ 0  1  2  3  4  5  6  7  8  9 10 11]
+UT:  ['bottle' 'cat' 'chair' 'face' 'house' 'rest' 'scissors' 'scrambledpix'
+ 'shoe']
+a:  <DatasetAttributesCollection: imgaffine,imghdr,imgtype,mapper,voxel_dim,voxel_eldim>
+chunks:  [ 0  0  0 ..., 11 11 11]
+fa:  <FeatureAttributesCollection: voxel_indices,vt_thr_glm>
+mapper:  <Chain: <Flatten>-<StaticFeatureSelection>>
+nfeatures:  39912
+sa:  <SampleAttributesCollection: chunks,run,subj,targets,task,time_coords,time_indices>
+shape:  (1452, 39912)
+targets:  ['rest' 'rest' 'rest' ..., 'rest' 'rest' 'rest']
+.========================================
+
+

@@ -5,9 +5,9 @@ verbose.level = 2
 verbose(1, "Loading data...")
 
 def Lee_Sujeto(sujeto):
-    data_path = '/home/inb/jhevia/pymvpa2/data'+str(sujeto)+'/Azalea2017/'
+    data_path = '/misc/charcot/jhevia/azalea_pymvpa/data'+str(sujeto)+'/Azalea2017/'
 
-    mask_fname = os.path.join(data_path, 'sub001', 'masks', 'orig', 'GFII.nii.gz')
+    mask_fname = os.path.join("/misc/arwen/azalea/PPI/TPJ_previous/MasksSubjects/PH101_Cor01_right_BIN.nii.gz")
 
     print '\n', data_path, '\n'
 
@@ -24,8 +24,8 @@ def Lee_Sujeto(sujeto):
         run_events = dhandle.get_bold_run_model(model, subj, run_id)
         # load BOLD data for this run (with masking); add 0-based chunk ID
         run_ds = dhandle.get_bold_run_dataset(subj, task, run_id,
-                                              chunks=run_id -1)
-#                                              mask=mask_fname)
+                                              chunks=run_id -1,
+                                              mask=mask_fname)
         # convert event info into a sample attribute and assign as 'targets'
         run_ds.sa['targets'] = events2sample_attr(
                     run_events, run_ds.sa.time_coords, noinfolabel='REST')
@@ -41,13 +41,13 @@ def Lee_Sujeto(sujeto):
     print ww.shape
     return ww
 
-ds_all = [0, 0, 0, 0]
-for suj in range(4):
-   print suj
-   xx = Lee_Sujeto(suj+1)
-   ds_all[suj] = xx
-   print xx.summary()
-   print '=============================================================================='
+ds_all = []
+for suj in range(33):
+   if suj+1 not in [7, 9, 19, 34, 26, 30]:
+      print suj+1
+      xx = Lee_Sujeto(suj+1)
+      xx = xx[xx.sa.targets != "REST"]
+      ds_all.append(xx)
 
 #filepath = os.path.join('/home/inb/santosg/TUTO/tutorial_data/data/haxby2001/',
 #                        'hyperalignment_tutorial_data.hdf5.gz')

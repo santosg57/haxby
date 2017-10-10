@@ -1,0 +1,89 @@
+>> Dataset basics and concepts
+
+> Load fMRI data
+
+>> Getting data in shape
+
+> Load real data
+
+> More structure, less duplication of work
+
+> Multi-session data
+
+> Basic preprocessing
+
+> Detrending
+
+> Normalization
+
+> Computing Patterns Of Activation
+
+GLM-analysis 
+a much simpler shortcut 
+mean samples per condition
+
+> There and back again – a Mapper’s tale
+
+
+>> Classifiers --  All Alike, Yet Different
+
+> Cross-validation
+
+> Any classifier, really
+
+> We Need To Take A Closer Look
+
+the generalization performance or error-
+However, error rates hide a lot of interesting information that is very important for an interpretation of results
+
+prediction error
+
+>> Looking here and there -- Searchlights
+
+implement a classification analysis
+our signal of interest is located
+confusion matrices
+estimating a score for each feature
+compute an ANOVA F-score per each feature
+
+> Measures
+
+is relatively painless
+If the code snippet above
+Where have we seen this before
+CrossValidation returns a dataset with a single feature -- the accuracy or error rate
+while OneWayAnova returns a vector with one value per feature
+But other than the number
+
+> Searching, searching, searching, ...
+
+amount of information encoded in its pattern 
+a locally constraint fashion
+
+>> Classifiers that do more -- Meta Classifiers
+
+
+>> Classification Model Parameters – Sensitivity Analysis
+
+
+>> Event-related Data Analysis
+
+>> Multi-dimensional Searchlights
+
+This is a little addendum 
+take a little glimpse
+it was promised
+peristimulus time segment
+
+
+>> Working with OpenFMRI.org data
+
+is appealing
+compliant
+As a bonus
+
+>> WiP: The Earth Is Round – Significance Testing
+
+>> Example Analyses and Scripts
+
+ 
